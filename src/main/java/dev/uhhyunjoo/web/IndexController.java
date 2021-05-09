@@ -1,5 +1,7 @@
 package dev.uhhyunjoo.web;
 
+import dev.uhhyunjoo.config.auth.LoginUser;
+import dev.uhhyunjoo.config.auth.dto.SessionUser;
 import dev.uhhyunjoo.service.posts.PostsService;
 import dev.uhhyunjoo.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,12 @@ public class IndexController {
     private final PostsService postsService;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());
+
+        if (user != null){
+            model.addAttribute("userName", user.getName());
+        }
         return "index";
         // 앞 경로 : src/main/resources/templates
         // 뒤의 파일 확장자 : .mustache 가 붙는다.
